@@ -50,6 +50,16 @@ SAMPLE_POSTS = [
     "This is fine",
     "So excited for the weekend",
     "I am not happy about this",
+    # --- added examples ---
+    "no cap this is the best day ever 😂",
+    "I absolutely love sitting in traffic for two hours",
+    "lowkey stressed but proud I finished it",
+    "just got the job offer omg 🥹",
+    "everything is fine I guess whatever",
+    "this homework is so boring I want to cry 😭",
+    "tired but happy it is finally over",
+    "slept 10 hours and still feel awful",
+    "honestly not bad for a Monday",
 ]
 
 # Human labels for each post above.
@@ -65,6 +75,16 @@ TRUE_LABELS = [
     "neutral",   # "This is fine"
     "positive",  # "So excited for the weekend"
     "negative",  # "I am not happy about this"
+    # --- added labels ---
+    "positive",  # "no cap this is the best day ever 😂"  — strong enthusiasm despite slang/emoji
+    "negative",  # "I absolutely love sitting in traffic for two hours"  — sarcasm, true meaning is negative
+    "mixed",     # "lowkey stressed but proud I finished it"  — two opposing feelings
+    "positive",  # "just got the job offer omg 🥹"  — clear excitement
+    "neutral",   # "everything is fine I guess whatever"  — resigned/flat tone, not clearly valenced
+    "negative",  # "this homework is so boring I want to cry 😭"  — negative words + emoji
+    "mixed",     # "tired but happy it is finally over"  — relief mixed with fatigue
+    "negative",  # "slept 10 hours and still feel awful"  — negation of expected positive
+    "mixed",     # "honestly not bad for a Monday"  — mild praise with low expectations
 ]
 
 # TODO: Add 5-10 more posts and labels.

@@ -9,6 +9,7 @@ This class starts with very simple logic:
   - Convert that score into a mood label
 """
 
+import string
 from typing import List, Dict, Tuple, Optional
 
 from dataset import POSITIVE_WORDS, NEGATIVE_WORDS
@@ -53,6 +54,9 @@ class MoodAnalyzer:
           - Normalize repeated characters ("soooo" -> "soo")
         """
         cleaned = text.strip().lower()
+        # Remove common punctuation so "happy!" matches "happy"
+        for char in ".,!?;:\"'()[]":
+            cleaned = cleaned.replace(char, " ")
         tokens = cleaned.split()
 
         return tokens
@@ -151,3 +155,17 @@ class MoodAnalyzer:
             f"(positive: {positive_hits or '[]'}, "
             f"negative: {negative_hits or '[]'})"
         )
+
+
+# Quick test to confirm preprocess works as expected
+if __name__ == "__main__":
+    analyzer = MoodAnalyzer()
+    test_cases = [
+        "I'm so happy today!",
+        "This is terrible, awful, and bad.",
+        "feeling okay... not great, not bad",
+    ]
+    for text in test_cases:
+        print(f"Input:  {text!r}")
+        print(f"Tokens: {analyzer.preprocess(text)}")
+        print()

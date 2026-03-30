@@ -72,15 +72,20 @@ class MoodAnalyzer:
         Positive words increase the score.
         Negative words decrease the score.
 
-        Each positive word found adds 1; each negative word found subtracts 1.
+        Each positive word adds 1; each negative word subtracts 1.
+        Enhancement: if the word immediately before a sentiment word is a negator
+        (not, never, no), the contribution is flipped.
+        Example: "not bad" → bad would subtract 1, but negated it adds 1 instead.
         """
+        negators = {"not", "never", "no"}
         tokens = self.preprocess(text)
         score = 0
-        for token in tokens:
+        for i, token in enumerate(tokens):
+            is_negated = i > 0 and tokens[i - 1] in negators
             if token in self.positive_words:
-                score += 1
+                score += -1 if is_negated else 1
             if token in self.negative_words:
-                score -= 1
+                score += 1 if is_negated else -1
         return score
 
     # ---------------------------------------------------------------------
@@ -103,12 +108,13 @@ class MoodAnalyzer:
         Just remember that whatever labels you return should match the labels
         you use in TRUE_LABELS in dataset.py if you care about accuracy.
         """
-        # TODO: Implement this method.
-        #   1. Call self.score_text(text) to get the numeric score.
-        #   2. Return "positive" if the score is above 0.
-        #   3. Return "negative" if the score is below 0.
-        #   4. Return "neutral" otherwise.
-        pass
+        score = self.score_text(text)
+        if score > 0:
+            return "positive"
+        elif score < 0:
+            return "negative"
+        else:
+            return "neutral"
 
     # ---------------------------------------------------------------------
     # Explanations (optional but recommended)
@@ -155,12 +161,14 @@ class MoodAnalyzer:
 if __name__ == "__main__":
     analyzer = MoodAnalyzer()
     test_cases = [
-        "I'm so happy today!",
-        "This is terrible, awful, and bad.",
-        "feeling okay... not great, not bad",
+        "I'm so happy today!",       # happy → score 1
+        "this is terrible and bad",  # terrible + bad → score -2
+        "not bad at all",            # bad flipped → score +1
+        "not happy with this",       # happy flipped → score -1
     ]
     for text in test_cases:
         print(f"Input:  {text!r}")
         print(f"Tokens: {analyzer.preprocess(text)}")
         print(f"Score:  {analyzer.score_text(text)}")
+        print(f"Label:  {analyzer.predict_label(text)}")
         print()
